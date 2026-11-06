@@ -69,7 +69,7 @@
 .ps-iconbutton:disabled{opacity:.38;cursor:not-allowed}
 .ps-stage{flex:1;display:flex;align-items:center;flex-direction:column;justify-content:center;gap:15px;min-height:620px;padding:26px 30px 17px;background:radial-gradient(circle at 50% 42%,#e3e9f4,#f4f6fa 72%)}
 .ps-canvas-shell{width:100%;min-height:485px;display:flex;align-items:center;justify-content:center;overflow:auto;border-radius:14px;background:repeating-conic-gradient(#eff2f7 0 25%,#e7ebf2 0 50%) 50%/22px 22px;border:1px solid #d7dfed;padding:20px;position:relative}
-.ps-canvas-shell canvas{display:block;width:auto;height:auto;max-width:min(calc(100% * var(--ps-zoom,1)),690px);max-height:610px;aspect-ratio:auto;object-fit:contain;box-shadow:0 16px 46px rgba(13,32,73,.29);touch-action:pan-x;cursor:ns-resize;background:#fff}
+.ps-canvas-shell canvas{display:block;width:auto;height:auto;max-width:min(var(--ps-width,100%),690px);max-height:610px;aspect-ratio:auto;object-fit:contain;box-shadow:0 16px 46px rgba(13,32,73,.29);touch-action:pan-x;cursor:ns-resize;background:#fff}
 .ps-stage-tip{font-size:11px;color:#6a7a93;font-weight:650;text-align:center}
 .ps-bottom-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 23px;border-top:1px solid #e2e8f0;background:#fff}
 .ps-zoom{display:flex;gap:9px;align-items:center;color:#5b7094;font-size:11px;font-weight:750}
