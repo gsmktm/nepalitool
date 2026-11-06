@@ -284,7 +284,7 @@ function paint(){
   c.fillText(t.symbol,w/2,h*.245);c.globalAlpha=1;
  }
  if(state.showLogo){
-  if(logoImage){const side=Math.min(115*s,w*.11);c.save();round(c,w-mx-side,Math.max(30*s,h*.05),side,side,14*s);c.clip();drawCover(c,logoImage,side,side,50);c.restore();}
+  if(logoImage){const side=Math.min(115*s,w*.11);c.save();c.translate(w-mx-side,Math.max(30*s,h*.05));round(c,0,0,side,side,14*s);c.clip();drawCover(c,logoImage,side,side,50);c.restore();}
   else{
    c.font="800 "+Math.max(16*s,Math.min(w*.024,27*s))+"px system-ui,sans-serif";
    c.fillStyle=accent;
@@ -422,7 +422,7 @@ function bind(){
    state=safe;save();syncUi(true);paintSoon();status("डिजाइन सेटिङ आयात गरियो ✓");
   }catch{status("अमान्य डिजाइन JSON फाइल।",true);}finally{e.target.value="";}
  });
- canvas.addEventListener("pointerdown",e=>{drag={y:e.clientY,start:state.y};canvas.setPointerCapture(e.pointerId);});
+ canvas.addEventListener("pointerdown",e=>{snapshot();drag={y:e.clientY,start:state.y};syncUi();canvas.setPointerCapture(e.pointerId);});
  canvas.addEventListener("pointermove",e=>{
   if(!drag)return;
   const r=canvas.getBoundingClientRect(),dy=(e.clientY-drag.y)/r.height*100;
@@ -438,7 +438,7 @@ function bind(){
   if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="z"&&!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)){e.preventDefault();nav("redo");}
  });
 }
-export function posterStudioPage(){return pageTools().replace('</div></section><div class="ps-secondary">','<div id="ps-status" role="status" aria-live="polite"></div></div></section><div class="ps-secondary">');}
+export function posterStudioPage(){return pageTools();}
 export function initPosterStudio(){
  state=readState();undo=[];redo=[];backgroundImage=null;logoImage=null;files={};
  host=document.querySelector(".ps-container");
