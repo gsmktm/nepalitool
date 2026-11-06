@@ -17,7 +17,7 @@ const tools = [
 ];
 const fontNames=["Anek Devanagari","Mukta","Noto Serif Devanagari","Kalam","Yatra One","Teko","Hind","Martel","Baloo 2","Khand","Rajdhani","Rozha One"];
 const fontKinds=["Versatile","Modern","Serif","Handwritten","Display","Headline","Modern","Serif","Rounded","Headline","Headline","Display"];
-const fontFamily=fontNames.map((name,i)=>({name,kind:fontKinds[i],url:"https://fonts.google.com/specimen/"+encodeURIComponent(name.replaceAll(" ","+"))}));
+const fontFamily=fontNames.map((name,i)=>({name,kind:fontKinds[i],url:"https://fonts.google.com/specimen/"+encodeURIComponent(name).replace(/%20/g,"+")}));
 const sampleText="नेपालको भाषा, कला र संस्कृति";
 const romanLex={
   namaste:"नमस्ते",nepal:"नेपाल",nepali:"नेपाली",kathmandu:"काठमाडौं",pokhara:"पोखरा",
@@ -156,6 +156,7 @@ const info={
 function infoPage(id){const p=info[id];return pageHead(p.title,p.desc,"INFORMATION")+'<div class="container main-panel"><div class="workbench text-page">'+p.body+'</div></div>';}
 function notFound(){return pageHead("पृष्ठ भेटिएन","मागिएको पृष्ठ उपलब्ध छैन।","404")+'<div class="container main-panel">'+link("tools","सबै उपकरणमा फर्कनुहोस्","btn btn-primary")+'</div>';}
 function render(){
+ testStarted=0;
  if(testTimer){clearInterval(testTimer);testTimer=null;} if(window.voiceRecognition){try{window.voiceRecognition.stop();}catch(e){}window.voiceRecognition=null;}
  currentRoute=route();
  const t=tools.find(x=>x.id===currentRoute);
@@ -178,6 +179,11 @@ function render(){
  root.innerHTML='<div class="shell">'+header()+'<main id="main" tabindex="-1">'+page+'</main>'+footer()+'</div><div id="toast" aria-live="polite" style="position:fixed;bottom:23px;right:23px;background:#243a54;color:#fff;padding:11px 16px;border-radius:10px;z-index:100;box-shadow:0 8px 25px #0005;display:none"></div>';
  document.title=(t?t.title:info[currentRoute]?.title||"नेपाली डिजिटल टुल्स")+" | TodayNepal Studio";
  if(currentRoute==="fonts")updateFonts();
+ if(currentRoute==="tools"){
+  const q=new URLSearchParams(location.search).get("q")||"";
+  const input=document.querySelector("#directory-search");if(input)input.value=q;
+  updateDirectory();
+ }
  if(currentRoute==="preeti-to-unicode"||currentRoute==="unicode-to-preeti")updateConversion();
  if(currentRoute==="documents")initDocument();
  if(currentRoute==="poster-maker")drawPoster();
@@ -189,6 +195,20 @@ function notice(msg){const n=document.querySelector("#toast");if(!n)return;n.tex
 function downloadFile(filename,blob){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 function textFile(filename,text){downloadFile(filename,new Blob([text],{type:"text/plain;charset=utf-8"}));}
 async function copyText(text){try{await navigator.clipboard.writeText(text);notice("पाठ प्रतिलिपि भयो ✓");}catch(e){const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();notice("पाठ प्रतिलिपि गरियो");}}
+function updateDirectory(){
+ const list=document.querySelector("#directory-list"),meta=document.querySelector("#directory-meta");
+ if(!list)return;
+ const term=(document.querySelector("#directory-search")?.value||"").toLocaleLowerCase("ne").trim();
+ const category=document.querySelector(".directory-categories .tab.active")?.dataset.kind||"all";
+ const matches=tools.filter(t=>(category==="all"||category===t.category)&&[t.title,t.en,t.desc,t.tag].join(" ").toLocaleLowerCase("ne").includes(term));
+ list.innerHTML=matches.length?matches.map(t=>card(t)).join(""):'<div class="empty">खोजिएको उपकरण भेटिएन। अर्को शब्द प्रयोग गर्नुहोस्।</div>';
+ if(meta)meta.textContent=matches.length+" उपकरण भेटिए";
+}
+function goToSearch(term){
+ const url=urlFor("tools")+(term?"?q="+encodeURIComponent(term):"");
+ history.pushState(null,"",url);
+ render();window.scrollTo({top:0,behavior:"instant"});
+}
 function updateFonts(){
  const el=document.querySelector("#font-list");if(!el)return;
  const query=(document.querySelector("#font-search")?.value||"").toLowerCase();
@@ -310,6 +330,8 @@ function drawAvatar(){
 function loadImage(file,callback){if(!file||!file.type.startsWith("image/"))return;if(file.size>15*1024*1024){notice("१५ MB भन्दा सानो फोटो छान्नुहोस्।");return;}const url=URL.createObjectURL(file),img=new Image();img.onload=()=>{URL.revokeObjectURL(url);callback(img);};img.onerror=()=>{URL.revokeObjectURL(url);notice("तस्बिर खोल्न सकिएन।");};img.src=url;}
 function handleAction(action,el){
  if(action==="menu"){const n=document.querySelector("#navlinks");n.classList.toggle("show");el.setAttribute("aria-expanded",n.classList.contains("show"));}
+ if(action==="directory-filter"){document.querySelectorAll(".directory-categories [data-kind]").forEach(x=>x.classList.toggle("active",x===el));updateDirectory();}
+ if(action==="quick-search"){goToSearch(el.dataset.query||"");}
  if(action==="font-filter"){document.querySelectorAll("[data-kind]").forEach(x=>x.classList.toggle("active",x===el));updateFonts();}
  if(action==="converter-clear"){document.querySelector("#conv-input").value="";updateConversion();}
  if(action==="converter-copy")copyText(document.querySelector("#conv-output").value);
@@ -343,6 +365,9 @@ function startVoice(){
  recognition.onend=()=>{const s=document.querySelector("#voice-status");if(s)s.textContent="रोकिएको";window.voiceRecognition=null;};
  try{recognition.start();document.querySelector("#voice-status").textContent="सुन्दैछ…";}catch(e){notice("माइक्रोफोन सुरु भएन।");window.voiceRecognition=null;}
 }
+document.addEventListener("submit",e=>{
+ if(e.target.id==="hero-search"){e.preventDefault();goToSearch(document.querySelector("#hero-search-input")?.value?.trim()||"");}
+});
 document.addEventListener("click",e=>{
  const a=e.target.closest("a[data-nav]");if(a&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!e.altKey&&e.button===0){e.preventDefault();history.pushState(null,"",a.href);render();window.scrollTo(0,0);return;}
  const b=e.target.closest("[data-action]");if(b){e.preventDefault();handleAction(b.dataset.action,b);}
@@ -350,6 +375,7 @@ document.addEventListener("click",e=>{
 document.addEventListener("input",e=>{
  const id=e.target.id;
  if(id==="font-search"||id==="font-sample")updateFonts();
+ if(id==="directory-search")updateDirectory();
  if(id==="conv-input")updateConversion();
  if(id==="roman-input")updateRoman();
  if(id==="num-input")updateNumbers();
