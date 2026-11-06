@@ -1,6 +1,8 @@
 
 import { preetiToUnicode, unicodeToPreeti } from "@lacspace/preeti";
 import "./styles.css";
+import "./posterStudio.css";
+import { posterStudioPage, initPosterStudio } from "./posterStudio.js";
 
 const tools = [
   {id:"fonts",icon:"अ",title:"नेपाली फन्ट लाइब्रेरी",en:"Font library",desc:"खुला लाइसेन्स भएका देवनागरी फन्ट खोज्नुहोस्, तुलना र पूर्वावलोकन गर्नुहोस्।",tag:"Fonts",category:"Design"},
@@ -170,7 +172,7 @@ function render(){
  else if(currentRoute==="voice-typing")page=voiceTyping();
  else if(currentRoute==="typing-test")page=typingTest();
  else if(currentRoute==="documents")page=documents();
- else if(currentRoute==="poster-maker")page=posterMaker();
+ else if(currentRoute==="poster-maker")page=posterStudioPage();
  else if(currentRoute==="background-remover")page=removeBgPage();
  else if(currentRoute==="profile-maker")page=profileMaker();
  else if(currentRoute==="nepali-numbers")page=numbers();
@@ -186,7 +188,7 @@ function render(){
  }
  if(currentRoute==="preeti-to-unicode"||currentRoute==="unicode-to-preeti")updateConversion();
  if(currentRoute==="documents")initDocument();
- if(currentRoute==="poster-maker")drawPoster();
+ if(currentRoute==="poster-maker")initPosterStudio();
  if(currentRoute==="background-remover")drawBgPlaceholder();
  if(currentRoute==="profile-maker")drawAvatar();
  if(currentRoute==="nepali-numbers")updateNumbers();
