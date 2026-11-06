@@ -308,13 +308,31 @@ function drawBgPlaceholder(){
 }
 function removeBg(){
  const c=document.querySelector("#bg-canvas");if(!c||!activeImage)return;
- const x=c.getContext("2d",{willReadFrequently:true}),w=c.width,h=c.height;x.clearRect(0,0,w,h);
- const r=Math.min(w/activeImage.width,h/activeImage.height,1),sw=Math.round(activeImage.width*r),sh=Math.round(activeImage.height*r);
- c.width=sw;c.height=sh;x.drawImage(activeImage,0,0,sw,sh);
+ const x=c.getContext("2d",{willReadFrequently:true}),w=960,h=700;
+ const scale=Math.min(w/activeImage.width,h/activeImage.height,1);
+ const sw=Math.max(1,Math.round(activeImage.width*scale)),sh=Math.max(1,Math.round(activeImage.height*scale));
+ c.width=sw;c.height=sh;x.clearRect(0,0,sw,sh);x.drawImage(activeImage,0,0,sw,sh);
  const image=x.getImageData(0,0,sw,sh),d=image.data,tolerance=Number(document.querySelector("#bg-tolerance")?.value||58);
- const pts=[[0,0],[sw-1,0],[0,sh-1],[sw-1,sh-1]].map(([px,py])=>{const k=(py*sw+px)*4;return [d[k],d[k+1],d[k+2]];});
- const avg=[0,1,2].map(n=>pts.reduce((sum,p)=>sum+p[n],0)/4);
- for(let k=0;k<d.length;k+=4){const dist=Math.sqrt((d[k]-avg[0])**2+(d[k+1]-avg[1])**2+(d[k+2]-avg[2])**2);if(dist<tolerance)d[k+3]=0;else if(dist<tolerance+25)d[k+3]=Math.round(255*(dist-tolerance)/25);}
+ const n=sw*sh;
+ const corners=[0,sw-1,(sh-1)*sw,n-1];
+ const colors=corners.map(i=>[d[i*4],d[i*4+1],d[i*4+2]]);
+ const corner=colors[0];
+ const close=(a,b,limit)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2])<=limit;
+ const neighbors=colors.filter(color=>close(color,corner,Math.max(48,tolerance*1.8)));
+ const bg=[0,1,2].map(k=>neighbors.reduce((sum,v)=>sum+v[k],0)/neighbors.length);
+ const visited=new Uint8Array(n),queue=new Int32Array(n);
+ let head=0,tail=0;
+ const enqueue=i=>{if(!visited[i]){visited[i]=1;queue[tail++]=i;}};
+ corners.forEach(i=>{const q=i*4;if(Math.hypot(d[q]-bg[0],d[q+1]-bg[1],d[q+2]-bg[2])<tolerance)enqueue(i);});
+ // Only erase connected pixels matching the background, preserving disconnected subject details.
+ while(head<tail){
+  const pixel=queue[head++],xPos=pixel%sw,yPos=Math.floor(pixel/sw),k=pixel*4;
+  d[k+3]=0;
+  const adjacent=[xPos?pixel-1:-1,xPos<sw-1?pixel+1:-1,yPos?pixel-sw:-1,yPos<sh-1?pixel+sw:-1];
+  for(const next of adjacent){if(next<0||visited[next])continue;const j=next*4;
+   if(Math.hypot(d[j]-bg[0],d[j+1]-bg[1],d[j+2]-bg[2])<tolerance)enqueue(next);
+  }
+ }
  x.putImageData(image,0,0);
 }
 function drawAvatar(){
@@ -360,9 +378,13 @@ function startVoice(){
  if(window.voiceRecognition){notice("पहिले नै सुनिरहेको छ।");return;}
  const recognition=new Speech();window.voiceRecognition=recognition;recognition.lang="ne-NP";recognition.continuous=true;recognition.interimResults=true;
  const output=document.querySelector("#voice-output"),base=output.value?output.value+" ":"";
- recognition.onresult=event=>{let final="",interim="";for(let i=event.resultIndex;i<event.results.length;i++){const t=event.results[i][0].transcript;if(event.results[i].isFinal)final+=t+" ";else interim+=t;}output.value=base+final+interim;};
- recognition.onerror=e=>{const s=document.querySelector("#voice-status");if(s)s.textContent="त्रुटि: "+e.error;window.voiceRecognition=null;};
- recognition.onend=()=>{const s=document.querySelector("#voice-status");if(s)s.textContent="रोकिएको";window.voiceRecognition=null;};
+ recognition.onresult=event=>{
+  // Read all segments: later interim events may not repeat the completed transcript at resultIndex.
+  let transcript="";for(let i=0;i<event.results.length;i++)transcript+=event.results[i][0].transcript+" ";
+  output.value=base+transcript.trim();
+ };
+ recognition.onerror=e=>{const el=document.querySelector("#voice-status");if(el)el.textContent="त्रुटि: "+e.error;window.voiceRecognition=null;};
+ recognition.onend=()=>{const el=document.querySelector("#voice-status");if(el)el.textContent="रोकिएको";window.voiceRecognition=null;};
  try{recognition.start();document.querySelector("#voice-status").textContent="सुन्दैछ…";}catch(e){notice("माइक्रोफोन सुरु भएन।");window.voiceRecognition=null;}
 }
 document.addEventListener("submit",e=>{
