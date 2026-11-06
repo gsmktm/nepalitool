@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/design", "destination": "/" },
+    { "source": "/design/:path*", "destination": "/" },
+    { "source": "/:path((?!assets/|favicon.svg|robots.txt).*)", "destination": "/" }
+  ],
+  "headers": [
+    { "source": "/(.*)", "headers": [
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+      { "key": "Permissions-Policy", "value": "camera=(), geolocation=()" },
+      { "key": "Content-Security-Policy", "value": "frame-ancestors 'self' https://todaynepal.com https://www.todaynepal.com" }
+    ]}
+  ]
+}
