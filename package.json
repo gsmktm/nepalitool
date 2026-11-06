@@ -12,6 +12,6 @@
     "@lacspace/preeti": "1.1.0"
   },
   "devDependencies": {
-    "vite": "6.3.5"
+    "vite": "8.3.6"
   }
 }
