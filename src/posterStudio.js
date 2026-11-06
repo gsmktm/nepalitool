@@ -321,7 +321,7 @@ function paint(){
  }
  c.restore();
  const d=document.querySelector("#ps-dimensions");if(d)d.textContent=w+" × "+h+" px";
- const shell=canvas.closest(".ps-canvas-shell");if(shell)shell.style.setProperty("--ps-zoom",clamp(state.zoom,40,120)/100);
+ const shell=canvas.closest(".ps-canvas-shell");if(shell)shell.style.setProperty("--ps-width",clamp(state.zoom,40,120)+"%");
 }
 function paintSoon(){if(drawPending)return;drawPending=true;requestAnimationFrame(()=>{drawPending=false;paint();});}
 function syncUi(resetAll=false){

@@ -43,3 +43,11 @@ Text conversion, document editing, image processing and PNG exports are local to
 ## Honest limits
 
 This is a substantial initial implementation, not identical full feature parity with aNepali's proprietary 200+ font catalog or advanced background-removal tool. Complex Preeti combinations, browser speech support and actual WordPress integration need browser/production QA.
+
+## Poster Studio V2
+
+At `/poster-maker/`, TodayNepal now has an original interactive design workspace featuring **12 templates** (Royal Heritage, Himalayan Dawn, Midnight Editorial, Festival Lights, Temple Skyline, Sacred Geometry, Vintage Parchment, Nepal Identity, Bold Typography, Terai Golden Hour, Shiva Cosmos, Newsroom Impact) and **five formats**: 1080×1350, 1080×1080, 1080×1920, 1920×1080, and 1200×628. Customize titles, kicker, description, typography, position, brand label, colors, frame, symbols and overlays; upload background and logo images (kept in the browser), drag the headline vertically, use undo/redo, import/export JSON drafts, and export PNG/JPEG/WebP. Saved drafts contain textual/settings data only — reselect uploaded images when reopening. This is an original local Canvas generator, not an AI image service.
+
+### Verification
+
+Run `npm run build` and test `/poster-maker/` interactively on desktop/mobile: switching templates and formats, preview/editing of Nepali text, fonts, photo crop, logo placement, JSON import/export, 3 image formats, canvas drag, browser back navigation, and localStorage. Vercel READY is a build/deployment indication, not proof of manual cross-browser QA.
