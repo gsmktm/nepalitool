@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="620" viewBox="0 0 760 620" fill="none">
+<defs><linearGradient id="screen" x1="229" y1="122" x2="537" y2="448"><stop stop-color="#18275C"/><stop offset="1" stop-color="#412C94"/></linearGradient><linearGradient id="cover" x1="300" y1="179" x2="519" y2="400"><stop stop-color="#512C97"/><stop offset=".6" stop-color="#7B41B0"/><stop offset="1" stop-color="#E27C9B"/></linearGradient><filter id="shadow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="19"/></filter></defs>
+<ellipse cx="385" cy="548" rx="300" ry="25" fill="#223964" opacity=".19" filter="url(#shadow)"/>
+<g transform="rotate(-3 377 326)">
+<rect x="96" y="85" width="571" height="392" rx="23" fill="#111F3C"/><rect x="106" y="95" width="551" height="366" rx="14" fill="#E8F0FF"/>
+<rect x="106" y="95" width="551" height="41" rx="14" fill="#FAFBFF"/><rect x="106" y="121" width="551" height="18" fill="#FAFBFF"/>
+<circle cx="129" cy="115" r="5" fill="#F17D8A"/><circle cx="145" cy="115" r="5" fill="#FFC66B"/><circle cx="161" cy="115" r="5" fill="#6DD0B9"/>
+<rect x="118" y="149" width="62" height="300" rx="13" fill="#162D6C"/>
+<g fill="#9AB7F3"><rect x="134" y="170" width="30" height="5" rx="2"/><path d="M139 207h23v19h-23z"/><path d="M141 258h21v17h-21z"/><circle cx="150" cy="312" r="11"/><rect x="140" y="354" width="21" height="20" rx="3"/></g>
+<rect x="195" y="151" width="445" height="280" rx="11" fill="#EEF1FF"/>
+<rect x="207" y="165" width="416" height="250" rx="8" fill="url(#cover)"/>
+<circle cx="550" cy="209" r="61" fill="#FAC574" opacity=".7"/>
+<path d="M207 372 301 284l51 43 88-107 100 112 83-57V415H207Z" fill="#BDDDF8"/>
+<path d="m347 334 93-114 69 77-35-20-31-36-34 50-23-13z" fill="#fff"/>
+<path d="M207 398 317 341l62 49 84-54 83 33 77-42V415H207Z" fill="#4361B5"/>
+<rect x="242" y="192" width="156" height="18" rx="9" fill="#fff" opacity=".8"/><rect x="242" y="220" width="111" height="12" rx="6" fill="#fff" opacity=".55"/>
+<g transform="translate(250 367)"><rect width="50" height="15" rx="7" fill="#FCF7FF"/><rect x="59" width="32" height="15" rx="7" fill="#F3C36F"/><rect x="100" width="32" height="15" rx="7" fill="#D74668"/><rect x="141" width="32" height="15" rx="7" fill="#2B469A"/><rect x="182" width="32" height="15" rx="7" fill="#34B7B0"/></g>
+<path d="M77 478h604l34 36c1 8-9 16-22 16H67c-17 0-22-8-21-16z" fill="#D4DEED"/><path d="M77 478h604l13 17H63Z" fill="#F6F9FF"/><rect x="327" y="486" width="110" height="9" rx="4.5" fill="#AABBD0"/>
+</g>
+<g transform="translate(535 268) rotate(6)"><rect width="172" height="290" rx="26" fill="#14264C"/><rect x="9" y="9" width="154" height="272" rx="20" fill="#EFF5FF"/><rect x="59" y="15" width="54" height="8" rx="4" fill="#14264C"/><rect x="23" y="52" width="128" height="165" rx="10" fill="#EDF2FF"/><text x="86" y="116" text-anchor="middle" fill="#244AA0" font-family="sans-serif" font-size="60" font-weight="700">अ</text><path d="M41 165h90" stroke="#8D9ECC" stroke-width="8" stroke-linecap="round"/><path d="M54 187h63" stroke="#BFCDEB" stroke-width="8" stroke-linecap="round"/><rect x="35" y="230" width="102" height="31" rx="9" fill="#1554C9"/><path d="m82 236 10 10-10 9m10-9H72" stroke="#fff" stroke-width="3" stroke-linecap="round"/></g>
+<g transform="translate(58 327) rotate(-14)"><rect width="145" height="175" rx="18" fill="#fff" stroke="#D3DEF4" stroke-width="3"/><circle cx="72" cy="69" r="39" fill="#FFF0DB"/><text x="72" y="85" text-anchor="middle" font-size="54" font-family="sans-serif" fill="#CE4D5F">ॐ</text><rect x="21" y="127" width="104" height="9" rx="5" fill="#D0DEF3"/><rect x="40" y="146" width="66" height="8" rx="4" fill="#E4EAF4"/></g>
+</svg>
