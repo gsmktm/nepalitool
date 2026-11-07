@@ -198,6 +198,8 @@ function render(){
  else if(currentRoute==="background-remover")page=removeBgPage();
  else if(currentRoute==="profile-maker")page=profileMaker();
  else if(currentRoute==="nepali-numbers")page=numbers();
+ else if(currentRoute==="festivals"||currentRoute.startsWith("festivals/")||["festival-studio","daily-quotes","patro"].includes(currentRoute))page='<div id="fs-root">'+festivalRoutePage(currentRoute)+'</div>';
+ else if(extraItems.some(x=>x.id===currentRoute))page=extraToolPage(currentRoute);
  else if(info[currentRoute])page=infoPage(currentRoute);
  else page=notFound();
  root.innerHTML='<div class="shell">'+header()+'<main id="main" tabindex="-1">'+page+'</main>'+footer()+'</div><div id="toast" aria-live="polite" style="position:fixed;bottom:23px;right:23px;background:#243a54;color:#fff;padding:11px 16px;border-radius:10px;z-index:100;box-shadow:0 8px 25px #0005;display:none"></div>';
@@ -214,6 +216,16 @@ function render(){
  if(currentRoute==="background-remover")drawBgPlaceholder();
  if(currentRoute==="profile-maker")drawAvatar();
  if(currentRoute==="nepali-numbers")updateNumbers();
+ if(currentRoute==="festivals"||currentRoute.startsWith("festivals/")||["festival-studio","daily-quotes","patro"].includes(currentRoute)){
+  initFestivalRoute(currentRoute,(id)=>{
+   const qPos=id.indexOf("?");
+   const path=qPos>=0?id.slice(0,qPos):id;
+   const query=qPos>=0?id.slice(qPos):"";
+   history.pushState(null,"",urlFor(path)+query);
+   render();window.scrollTo(0,0);
+  });
+ }
+ if(extraItems.some(x=>x.id===currentRoute))initExtraTool(currentRoute);
 }
 function notice(msg){const n=document.querySelector("#toast");if(!n)return;n.textContent=msg;n.style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(()=>n.style.display="none",2800);}
 function downloadFile(filename,blob){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);}
