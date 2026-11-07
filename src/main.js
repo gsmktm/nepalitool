@@ -65,6 +65,19 @@ const glyphs={
   "background-remover":'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18M3 3l18 18" stroke-dasharray="2 3"/>',
   "profile-maker":'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0M3 3h4M17 3h4"/>',
   "nepali-numbers":'<path d="M6 5h4v14M4 19h8M14 6c1-2 6-2 6 1 0 2-5 5-6 9h7"/>',
+  "festivals":'<path d="M12 3v18M3 12h18M5 5l14 14M19 5 5 19M12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12Z"/>',
+  "festival-studio":'<path d="M4 4h16v16H4zM8 16l5-6 3 3 4-4M12 2v4M2 12h4"/>',
+  "daily-quotes":'<path d="M6 11h6v9H4v-7l4-7M16 11h6v9h-8v-7l4-7"/>',
+  "patro":'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M7 14h3M14 14h3"/>',
+  "qr-maker":'<path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3M21 14v3M14 21h7M17 17v4"/>',
+  "image-resizer":'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 16l4-4 4 4 3-3 5 6M8 8h.01"/>',
+  "text-analyzer":'<path d="M6 4h12M6 9h12M6 14h9M6 19h6"/>',
+  "emi-calculator":'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2"/>',
+  "vat-calculator":'<path d="m4 20 16-16M8 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm8 10a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/>',
+  "json-formatter":'<path d="M8 3H5v7l-2 2 2 2v7h3M16 3h3v7l2 2-2 2v7h-3"/>',
+  "password-generator":'<rect x="5" y="10" width="14" height="12" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 15v3"/>',
+  "color-palette":'<path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 2-2 2 2 0 0 0-.3-1 2 2 0 0 1 1.8-3H19a3 3 0 0 0 3-3 9 9 0 0 0-10-9Z"/><circle cx="7" cy="10" r="1"/><circle cx="11" cy="7" r="1"/><circle cx="17" cy="8" r="1"/>',
+  "date-difference":'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M8 15l2 2 5-5"/>',
   "tools":'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
   "search":'<circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/>',
   "arrow":'<path d="M5 12h14m-6-6 6 6-6 6"/>',
@@ -85,8 +98,8 @@ function card(item,featured=false){
  return '<a class="tool-card tone-'+item.id+(featured?' featured':'')+'" href="'+urlFor(item.id)+'" data-nav="'+item.id+'"><span class="tool-icon">'+icon(item.id)+'</span><span class="card-arrow" aria-hidden="true">'+icon("arrow")+'</span><span class="card-title">'+escapeHtml(item.title)+'</span><span class="card-en">'+escapeHtml(item.en)+'</span><p>'+escapeHtml(item.desc)+'</p><span class="card-bottom"><span>'+escapeHtml(item.tag)+'</span><strong>खोल्नुहोस् ↗</strong></span></a>';
 }
 function header(){
- const menu=[["home","गृहपृष्ठ"],["fonts","नेपाली फन्ट"],["poster-maker","डिजाइन"],["unicode-to-preeti","कन्भर्टर"],["documents","डकुमेन्ट"]];
- const categories=[["home","गृहपृष्ठ","home"],["easy-nepali-typing","टाइपिङ","easy-nepali-typing"],["unicode-to-preeti","कन्भर्टर","unicode-to-preeti"],["fonts","फन्ट","fonts"],["poster-maker","पोस्टर डिजाइन","poster-maker"],["documents","डकुमेन्ट","documents"],["tools","सबै टुल्स","tools"]];
+ const menu=[["home","गृहपृष्ठ"],["festivals","पर्व–संस्कृति"],["festival-studio","शुभकामना डिजाइन"],["daily-quotes","३६५ मोटो"],["poster-maker","पोस्टर"],["fonts","फन्ट"]];
+ const categories=[["home","गृहपृष्ठ","home"],["easy-nepali-typing","टाइपिङ","easy-nepali-typing"],["unicode-to-preeti","कन्भर्टर","unicode-to-preeti"],["fonts","फन्ट","fonts"],["poster-maker","पोस्टर डिजाइन","poster-maker"],["festival-studio","पर्व डिजाइन","festival-studio"],["festivals","चाडपर्व","festivals"],["tools","सबै टुल्स","tools"]];
  return '<div class="announcement"><div class="container announcement-inner"><span>🇳🇵 नेपाली भाषा, डिजाइन र प्रविधिको साझा कार्यस्थल</span><a href="https://todaynepal.com" target="_blank" rel="noopener noreferrer">TodayNepal समाचार ↗</a></div></div>'
  +'<header class="topbar"><div class="container topbar-inner"><a class="brand" href="'+urlFor("home")+'" data-nav="home" aria-label="TodayNepal Studio गृहपृष्ठ"><span class="brand-mark"><img src="/mountain-logo.svg" alt="" width="43" height="38"></span><span class="brand-words"><span class="brand-title">TodayNepal<span>.com</span></span><span class="brand-sub">✦ DESIGN & DIGITAL TOOLS</span></span></a>'
  +'<nav class="navlinks" id="navlinks" aria-label="मुख्य नेभिगेसन">'+menu.map(m=>link(m[0],m[1],currentRoute===m[0]?"active":"")).join("")+link("tools",icon("tools")+' सबै टुल्स',"nav-cta")+'</nav>'
@@ -94,7 +107,7 @@ function header(){
  +'<div class="subnav"><nav class="container subnav-inner" aria-label="उपकरण नेभिगेसन">'+categories.map(m=>link(m[0],icon(m[2])+" "+m[1],currentRoute===m[0]?"active":"")).join("")+'</nav></div>';
 }
 function footer(){
- const group=[["उपकरण",["fonts","unicode-to-preeti","preeti-to-unicode","easy-nepali-typing","voice-typing"]],["डिजाइन",["poster-maker","background-remover","profile-maker","documents","typing-test"]],["जानकारी",["about","privacy","support","tools","nepali-numbers"]]];
+ const group=[["उपकरण",["fonts","unicode-to-preeti","qr-maker","image-resizer","emi-calculator","tools"]],["पर्व र डिजाइन",["festivals","festival-studio","daily-quotes","patro","poster-maker","documents"]],["जानकारी",["about","privacy","support","json-formatter","color-palette","nepali-numbers"]]];
  return '<footer class="site-footer"><div class="container"><div class="footer-columns"><div class="footer-intro"><a class="brand" href="'+urlFor("home")+'" data-nav="home"><span class="brand-mark"><img src="/mountain-logo.svg" alt="" width="43" height="38"></span><span class="brand-words"><span class="brand-title">TodayNepal<span>.com</span></span><span class="brand-sub">✦ DESIGN & DIGITAL TOOLS</span></span></a><p>नेपाली भाषा, सृजनशीलता र प्रविधिका लागि मौलिक डिजिटल कार्यस्थल।</p><div class="footer-actions"><a href="https://todaynepal.com" target="_blank" rel="noopener noreferrer">समाचार पोर्टल ↗</a><a href="https://github.com/gsmktm/nepalitool" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div>'
  +group.map(g=>'<div class="footer-links"><h4>'+g[0]+'</h4>'+g[1].map(id=>link(id,tools.find(t=>t.id===id)?.title||({about:"हाम्रो बारेमा",privacy:"गोपनीयता",support:"सहयोग",tools:"सबै उपकरण"}[id])||id)).join("")+'</div>').join("")
  +'</div><div class="footer-bottom"><span>© '+new Date().getFullYear()+' TodayNepal.com · सबै अधिकार सुरक्षित।</span><span>नेपालमा सृजना · नेपालीका लागि उपयोगी उपकरण</span></div></div></footer>';
