@@ -3,8 +3,10 @@ import { preetiToUnicode, unicodeToPreeti } from "@lacspace/preeti";
 import "./styles.css";
 import "./posterStudio.css";
 import { posterStudioPage, initPosterStudio } from "./posterStudio.js";
+import {festivalRoutePage, initFestivalRoute} from "./festivalStudio.js";
+import {extraItems, extraToolPage, initExtraTool} from "./extraTools.js";
 
-const tools = [
+const baseTools = [
   {id:"fonts",icon:"अ",title:"नेपाली फन्ट लाइब्रेरी",en:"Font library",desc:"खुला लाइसेन्स भएका देवनागरी फन्ट खोज्नुहोस्, तुलना र पूर्वावलोकन गर्नुहोस्।",tag:"Fonts",category:"Design"},
   {id:"unicode-to-preeti",icon:"⇄",title:"Unicode → Preeti",en:"Unicode to Preeti",desc:"नेपाली Unicode पाठलाई पुरानो Preeti encoding मा रूपान्तरण गर्नुहोस्।",tag:"Converter",category:"Writing"},
   {id:"preeti-to-unicode",icon:"अ+",title:"Preeti → Unicode",en:"Preeti to Unicode",desc:"पुरानो Preeti कागजातलाई मोबाइल र वेबमा चल्ने Unicode मा बदल्नुहोस्।",tag:"Converter",category:"Writing"},
@@ -17,6 +19,13 @@ const tools = [
   {id:"profile-maker",icon:"◈",title:"प्रोफाइल फोटो मेकर",en:"Profile maker",desc:"आफ्नो तस्बिरमा नेपाल पहिचानको मौलिक फ्रेम लगाउनुहोस्।",tag:"Social",category:"Design"},
   {id:"nepali-numbers",icon:"१२३",title:"नेपाली अंक रूपान्तरण",en:"Numeral converter",desc:"०१२३ र 0123 बीचमा अंक तुरुन्तै रूपान्तरण गर्नुहोस्।",tag:"Numbers",category:"Utilities"}
 ];
+const culturalTools=[
+ {id:"festivals",icon:"✺",title:"नेपाली पर्व र जात्रा संग्रह",en:"Festivals of Nepal",desc:"पर्वअनुसार मौलिक शुभकामना, समुदाय र संस्कृतिको खोज।",tag:"Culture",category:"Culture"},
+ {id:"festival-studio",icon:"✦",title:"फेस्टिभल पोस्टर स्टुडियो",en:"Festival Poster Studio",desc:"चाडपर्व छानेर नेपाली शुभकामना पोस्टर बनाउनुहोस्।",tag:"Festivals",category:"Culture"},
+ {id:"daily-quotes",icon:"३६५",title:"३६५ दिनका नेपाली सन्देश",en:"365 Daily Nepali Quotes",desc:"हरेक दिनको मौलिक प्रेरणा, मोटो र डिजाइन।",tag:"Daily",category:"Culture"},
+ {id:"patro",icon:"▣",title:"प्रमाणित पर्व मिति २०८३",en:"Verified Festival Dates",desc:"स्रोतसहितका २०८३ सालका छनोट गरिएका पर्व मिति।",tag:"Calendar",category:"Culture"}
+];
+const tools=[...baseTools,...culturalTools,...extraItems];
 const fontNames=["Anek Devanagari","Mukta","Noto Serif Devanagari","Kalam","Yatra One","Teko","Hind","Martel","Baloo 2","Khand","Rajdhani","Rozha One"];
 const fontKinds=["Versatile","Modern","Serif","Handwritten","Display","Headline","Modern","Serif","Rounded","Headline","Headline","Display"];
 const fontFamily=fontNames.map((name,i)=>({name,kind:fontKinds[i],url:"https://fonts.google.com/specimen/"+encodeURIComponent(name).replace(/%20/g,"+")}));
