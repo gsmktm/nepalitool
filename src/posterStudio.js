@@ -441,6 +441,23 @@ function bind(){
 export function posterStudioPage(){return pageTools();}
 export function initPosterStudio(){
  state=readState();undo=[];redo=[];backgroundImage=null;logoImage=null;files={};
+ let fromFestival=false;
+ try{
+  const presetJSON=sessionStorage.getItem("tn-festival-preset");
+  if(presetJSON){
+   sessionStorage.removeItem("tn-festival-preset");
+   const preset=JSON.parse(presetJSON);
+   if(preset&&typeof preset==="object"){
+    try{localStorage.setItem("tn-poster-prior-draft",JSON.stringify(state));}catch{}
+    const keys=["title","kicker","description","footer","brand","template","showSymbol","showLogo"];
+    for(const key of keys){
+     if(typeof preset[key]===typeof state[key]&&(typeof preset[key]!=="string"||preset[key].length<700))state[key]=preset[key];
+    }
+    if(!templates.some(t=>t.id===state.template))state.template="festival";
+    fromFestival=true;
+   }
+  }
+ }catch{}
  host=document.querySelector(".ps-container");
  canvas=host?.querySelector("#ps-canvas")||null;
  if(!host||!canvas)return;
@@ -450,5 +467,20 @@ export function initPosterStudio(){
   if(bar)bar.insertAdjacentHTML("beforeend",'<p id="ps-status" role="status" aria-live="polite"></p>');
  }
  bind();syncUi(true);paintSoon();
+ if(fromFestival){
+  const bar=host.querySelector(".ps-main");
+  if(bar){
+   bar.insertAdjacentHTML("beforeend",'<div class="ps-festival-preset">✦ पर्व प्रिसेट खुल्यो। अघिल्लो स्थानीय ड्राफ्टको प्रति सुरक्षित छ। <button type="button" id="ps-restore-draft">अघिल्लो ड्राफ्ट फर्काउनुहोस्</button></div>');
+   bar.querySelector("#ps-restore-draft")?.addEventListener("click",()=>{
+    try{
+     const old=JSON.parse(localStorage.getItem("tn-poster-prior-draft"));
+     if(!old||typeof old!=="object")throw new Error();
+     state={...starter,...old};save();syncUi(true);paintSoon();
+     bar.querySelector(".ps-festival-preset")?.remove();
+     status("अघिल्लो ड्राफ्ट फर्काइयो ✓");
+    }catch{status("अघिल्लो ड्राफ्ट फेला परेन",true);}
+   });
+  }
+ }
  if(document.fonts?.ready)document.fonts.ready.then(()=>{if(canvas?.isConnected)paintSoon();});
 }
