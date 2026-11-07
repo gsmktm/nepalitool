@@ -85,17 +85,37 @@ function writePreset(f,quote,brand="TodayNepal.com",subtitle="हार्दि
 function navigatePoster(navigate){navigate("poster-maker");}
 function initDaily(){
  const today=quoteForToday();selectedDaily=Math.min(365,today.dayNumber);
+ let responseToken=0;
  const current=()=>dailyQuote(selectedDaily-1);
  const update=()=>{
   const q=document.querySelector("#fs-daily-text"),n=document.querySelector("#fs-day-label"),range=document.querySelector("#fs-day"),num=document.querySelector("#fs-day-num");
-  if(q)q.textContent=current();if(n)n.textContent="३६५ मध्ये दिन "+selectedDaily;if(range)range.value=selectedDaily;if(num)num.textContent=selectedDaily;
-  const dt=document.querySelector("#fs-quote-date");if(dt)dt.textContent=selectedDaily===today.dayNumber?"आज • "+today.date:"सम्पादकीय सन्देश • दिन "+selectedDaily;
+  if(q)q.textContent=current();
+  if(n)n.textContent="३६५ मध्ये दिन "+selectedDaily+" · स्थानीय";
+  if(range)range.value=selectedDaily;
+  if(num)num.textContent=selectedDaily;
+  const dt=document.querySelector("#fs-quote-date");
+  if(dt)dt.textContent=selectedDaily===today.dayNumber?"आज • "+today.date:"सम्पादकीय सन्देश • दिन "+selectedDaily;
  };
- update();
+ const verifyWithAPI=()=>{
+  const expected=selectedDaily,token=++responseToken;
+  const signal=typeof AbortSignal!=="undefined"&&AbortSignal.timeout?AbortSignal.timeout(5000):undefined;
+  fetch("/api/daily?day="+expected,{signal}).then(async response=>{
+   if(!response.ok||!(response.headers.get("content-type")||"").includes("application/json"))return;
+   const data=await response.json();
+   const q=document.querySelector("#fs-daily-text"),label=document.querySelector("#fs-day-label");
+   if(token!==responseToken||expected!==selectedDaily||!q?.isConnected)return;
+   if(data.day!==expected||typeof data.quote!=="string"||data.quote!==dailyQuote(expected-1))return;
+   q.textContent=data.quote;
+   if(label)label.textContent="३६५ मध्ये दिन "+expected+" · API";
+  }).catch(()=>{/* Offline fallback deliberately stays visible. */});
+ };
+ const changeDay=num=>{selectedDaily=num;update();verifyWithAPI();};
+ update();verifyWithAPI();
  document.querySelector("#fs-day")?.addEventListener("input",e=>{selectedDaily=Number(e.target.value);update();});
- document.querySelector("#fs-prev")?.addEventListener("click",()=>{selectedDaily=selectedDaily===1?365:selectedDaily-1;update();});
- document.querySelector("#fs-next")?.addEventListener("click",()=>{selectedDaily=selectedDaily===365?1:selectedDaily+1;update();});
- document.querySelector("#fs-today")?.addEventListener("click",()=>{selectedDaily=quoteForToday().dayNumber;update();});
+ document.querySelector("#fs-day")?.addEventListener("change",()=>verifyWithAPI());
+ document.querySelector("#fs-prev")?.addEventListener("click",()=>changeDay(selectedDaily===1?365:selectedDaily-1));
+ document.querySelector("#fs-next")?.addEventListener("click",()=>changeDay(selectedDaily===365?1:selectedDaily+1));
+ document.querySelector("#fs-today")?.addEventListener("click",()=>changeDay(quoteForToday().dayNumber));
  document.querySelector("#fs-copy-quote")?.addEventListener("click",()=>copy(current()));
 }
 function initCatalog(){
