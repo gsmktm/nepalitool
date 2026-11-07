@@ -101,12 +101,28 @@ function initDaily(){
 function initCatalog(){
  const search=document.querySelector("#fs-search"),category=document.querySelector("#fs-category"),grid=document.querySelector("#fs-grid"),count=document.querySelector("#fs-count");
  if(!grid)return;
- const filter=()=>{const query=search.value.trim().toLocaleLowerCase("ne"),group=category.value;
-  const found=festivals.filter(f=>(group==="सबै"||group===f.category)&&[f.name,f.category,f.season,...f.quotes].join(" ").toLocaleLowerCase("ne").includes(query));
-  grid.innerHTML=found.length?found.map(festivalCard).join(""):'<p class="fs-no-results">यो खोजसँग मिल्ने पर्व भेटिएन।</p>';count.textContent=found.length+" अवसरहरू";
+ let dataset=festivals;
+ let origin="स्थानीय";
+ const filter=()=>{
+  const query=search.value.trim().toLocaleLowerCase("ne"),group=category.value;
+  const found=dataset.filter(f=>(group==="सबै"||group===f.category)&&[f.name,f.category,f.season,...f.quotes].join(" ").toLocaleLowerCase("ne").includes(query));
+  grid.innerHTML=found.length?found.map(festivalCard).join(""):'<p class="fs-no-results">यो खोजसँग मिल्ने पर्व भेटिएन।</p>';
+  count.textContent=found.length+" अवसरहरू · "+origin;
  };
  search.addEventListener("input",filter);category.addEventListener("change",filter);
+ filter();
+ // Same-origin Vercel API is preferred in production, but the catalog stays usable offline/in Vite preview.
+ const signal=typeof AbortSignal!=="undefined"&&AbortSignal.timeout?AbortSignal.timeout(5000):undefined;
+ fetch("/api/festivals?limit=75",{signal}).then(async response=>{
+  if(!response.ok||!(response.headers.get("content-type")||"").includes("application/json"))throw new Error("API unavailable");
+  const data=await response.json();
+  if(!Array.isArray(data.festivals)||data.festivals.length!==75||
+     !data.festivals.every(f=>typeof f.id==="string"&&typeof f.name==="string"&&Array.isArray(f.quotes)))throw new Error("API payload mismatch");
+  if(!grid.isConnected)return;
+  dataset=data.festivals;origin="API";filter();
+ }).catch(()=>{if(grid.isConnected){origin="स्थानीय";filter();}});
 }
+
 function initCreator(){
  const select=document.querySelector("#fs-editor-festival"),title=document.querySelector("#fs-editor-title"),sub=document.querySelector("#fs-editor-sub"),brand=document.querySelector("#fs-editor-brand"),preview=document.querySelector("#fs-live-preview");
  if(!select)return;
