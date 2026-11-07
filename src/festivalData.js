@@ -48,5 +48,6 @@ export function dayOfYear(dateString){
 }
 export function quoteForToday(now=new Date()){
  const date=kathmanduDate(now);
- return {date,quote:dailyQuote(dayOfYear(date)),dayNumber:dayOfYear(date)+1};
+ const dailyIndex=dayOfYear(date)%365;
+ return {date,quote:dailyQuote(dailyIndex),dayNumber:dailyIndex+1};
 }
